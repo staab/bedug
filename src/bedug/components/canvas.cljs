@@ -27,17 +27,31 @@
       :else attrs)))
 
 (defmethod command->attrs :rotate-left [_ attrs] (update attrs :r - 90))
+
 (defmethod command->attrs :rotate-right [_ attrs] (update attrs :r + 90))
 
-(defn commands->transform [commands]
-  (loop [idx 0 attrs {:r 0 :x 0 :y 0}]
-    (let [c (nth commands idx nil)
-          {:keys [r x y]} attrs]
-      (if c
-        (recur (inc idx) (command->attrs c attrs))
-        (str "translate(" x "px, " y "px) rotate(" r "deg)")))))
+(defmethod command->attrs :shake [_ attrs] attrs)
+(defmethod command->attrs :turn-blue [_ attrs] (merge attrs {:c "text-blue"}))
+(defmethod command->attrs :turn-red [_ attrs] (merge attrs {:c "text-red"}))
+(defmethod command->attrs :turn-green [_ attrs] (merge attrs {:c "text-green"}))
+
+(defn commands->attrs [commands]
+  (loop [idx 0 attrs {:r 0 :x 0 :y 0 :c ""}]
+    (let [c (nth commands idx nil)]
+      (if c (recur (inc idx) (command->attrs c attrs)) attrs))))
+
+(defn attrs->transform [{:keys [x y r]}]
+  (str "translate(" x "px, " y "px) rotate(" r "deg)"))
+
+(defn bug-class [{:keys [c]} shake]
+  (let [base (str "bedug-bug fa fa-3x fa-bug " c)]
+    (if shake (str base " shake") base)))
 
 (defn canvas []
-  (let [style {:transform (commands->transform (take @s/step @s/queue))}]
+  (let [commands (take @s/step @s/queue)
+        attrs (commands->attrs commands)
+        transform (attrs->transform attrs)
+        class (bug-class attrs (= (last commands) :shake))
+        style {:transform transform}]
     [:div {:class "bedug-canvas"}
-     [:i {:class "bedug-bug fa fa-3x fa-bug" :style style}]]))
+     [:i {:class class :style style}]]))

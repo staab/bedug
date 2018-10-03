@@ -64,3 +64,36 @@ html, body {
   background-color: #8DDEF0;
 }
 
+.bedug-block.bedug-block-orange {
+  background-color: #F0C78D;
+}
+
+/* Colors */
+
+.text-blue {
+  color: blue;
+}
+
+.text-green {
+  color: green;
+}
+
+.text-red {
+  color: red;
+}
+
+/* Animations */
+
+.shake {
+  position: relative;
+  animation: shake 300ms infinite;
+}
+
+@keyframes shake {
+  0%, 100% {
+    left: -5px;
+  }
+  50% {
+    left: 5px;
+  }
+}
