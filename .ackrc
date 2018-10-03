@@ -1,0 +1,7 @@
+--ignore-dir=.shadow-cljs
+--ignore-dir=.cpcache
+--ignore-dir=public/js
+--ignore-file=match:yarn-error.log
+--ignore-file=match:.gitignore
+--ignore-file=match:.ackrc
+--ignore-file=match:.rebel_readline_history

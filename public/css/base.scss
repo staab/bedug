@@ -1,0 +1,66 @@
+html, body {
+  margin: 0;
+}
+
+.bedug-app {
+
+}
+
+.bedug-canvas {
+  position: absolute;
+  left: 0;
+  right: 140px;
+  top: 0;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.bedug-queue {
+  overflow: auto;
+  background-color: #5B5B5B;
+  position: absolute;
+  right: 120px;
+  width: 120px;
+  height: 100vh;
+}
+
+.bedug-palette {
+  overflow: auto;
+  background-color: #393939;
+  position: absolute;
+  right: 0;
+  width: 120px;
+  height: 100vh;
+}
+
+.bedug-control {
+  position: absolute;
+  bottom: 20px;
+  left: 20px;
+}
+
+.bedug-control .fa {
+  cursor: pointer;
+}
+
+.bedug-block {
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, .25);
+  margin: 10px;
+  width: 100px;
+  height: 100px;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.bedug-block .fa {
+  opacity: 0.7;
+}
+
+.bedug-block.bedug-block-blue {
+  background-color: #8DDEF0;
+}
+

@@ -1,0 +1,13 @@
+{:source-paths ["src"]
+ :dependencies [[reagent "0.8.1"]]
+ :builds
+ {:app
+  {:target :browser
+   :output-dir "public/js"
+   :asset-path "/js"
+   :modules {:main {:entries [bedug.core]}}
+   :compiler-options {:source-map true}
+   :devtools
+   {:http-root "public"
+    :http-port 8700
+    :http-host "0.0.0.0"}}}}
