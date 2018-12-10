@@ -5,8 +5,8 @@
             [bedug.components.control :refer [control]]))
 
 (defn app []
-  [:div {:class "bedug-app"}
-   [canvas]
-   [queue]
-   [palette]
-   [control]])
+  (let [path (-> js/window .-location .-pathname)]
+    (case path
+      "/control" [:div {:class "bedug-control-app"} [queue] [palette]]
+      "/canvas" [:div {:class "bedug-canvas-app"} [canvas] [control]]
+      [:div {:class "bedug-app"} [canvas] [queue] [palette] [control]])))

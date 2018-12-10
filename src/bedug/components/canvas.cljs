@@ -1,6 +1,6 @@
 (ns bedug.components.canvas
   (:require [clojure.string :as str]
-            [bedug.state :as s]))
+            [bedug.state :refer [state]]))
 
 (defmulti command->attrs (fn [command _] command))
 
@@ -48,7 +48,8 @@
     (if shake (str base " shake") base)))
 
 (defn canvas []
-  (let [commands (take @s/step @s/queue)
+  (let [{:keys [step queue]} @state
+        commands (take step queue)
         attrs (commands->attrs commands)
         transform (attrs->transform attrs)
         class (bug-class attrs (= (last commands) :shake))

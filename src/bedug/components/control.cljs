@@ -1,28 +1,28 @@
 (ns bedug.components.control
-  (:require [bedug.state :as s]))
+  (:require [bedug.state :refer [state]]))
 
-(defn done? [] (>= @s/step (count @s/queue)))
+(defn done? []
+  (>= (:step @state) (count (:queue @state))))
 
 (defn tick []
-  (if
-    (done?)
-    (reset! s/animate :done)
-    (swap! s/step inc)))
+  (if (done?)
+    (swap! state assoc :animate :done)
+    (swap! state update :step inc)))
 
 (defn toggle-animate []
-  (when
-    (done?)
-    (reset! s/step 0))
-  (if
-    (= @s/animate :play)
-    (reset! s/animate :pause)
-    (reset! s/animate :play)))
+  (swap! state assoc :step 0)
+  (if (= (:animate @state) :play)
+    (swap! state assoc :animate :pause)
+    (swap! state assoc :animate :play)))
 
 (defn control []
-  (let [p-button (if (= @s/animate :play) "fa fa-2x fa-pause" "fa fa-2x fa-play")]
-    (when (= @s/animate :play) (js/setTimeout tick 300))
-    ; Gotta deref step to trigger re-render
-    (deref s/step)
+  (let [playing (= (:animate @state) :play)
+        p-button (if playing "fa fa-2x fa-pause" "fa fa-2x fa-play")]
+    (when playing
+      (js/setTimeout tick 300))
     [:div {:class "bedug-control"}
-     [:i {:class p-button :on-click toggle-animate}]]))
+     [:i {:class p-button :on-click toggle-animate}]
+     [:br]
+     [:br]
+     [:i {:class "fa fa-2x fa-expand" :on-click #(-> js/document .-documentElement .requestFullscreen)}]]))
 

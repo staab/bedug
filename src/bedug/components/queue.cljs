@@ -1,6 +1,6 @@
 (ns bedug.components.queue
   (:require [bedug.utils :refer [vec-remove]]
-            [bedug.state :as s]
+            [bedug.state :refer [state]]
             [bedug.components.block :refer [block]]))
 
 (defn queue []
@@ -8,8 +8,8 @@
    (doall
      (map-indexed
        (fn [idx command]
+         ^{:key (str command idx)}
          [block
           command
-          {:key (str command idx)
-           :on-click #(swap! s/queue vec-remove idx)}])
-       @s/queue))])
+          {:on-click #(swap! state update :queue vec-remove idx)}])
+       (:queue @state)))])
