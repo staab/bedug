@@ -2,7 +2,7 @@
   (:require [ring.adapter.jetty :refer [run-jetty]]
             [ring.util.request :refer [body-string]]))
 
-(def state (atom "{}"))
+(def state (atom "{:queue [] :step 0 :animate :initialize}"))
 
 (defn handler [{:keys [request-method body] :as req}]
   (when (= request-method :put)
