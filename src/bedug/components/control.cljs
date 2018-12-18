@@ -1,22 +1,22 @@
 (ns bedug.components.control
-  (:require [bedug.state :refer [state]]))
+  (:require [bedug.state :refer [player-state animation-state]]))
 
 (defn done? []
-  (>= (:step @state) (count (:queue @state))))
+  (>= (:step @animation-state) (count (:queue @player-state))))
 
 (defn tick []
   (if (done?)
-    (swap! state assoc :animate :done)
-    (swap! state update :step inc)))
+    (swap! animation-state assoc :animate :done)
+    (swap! animation-state update :step inc)))
 
 (defn toggle-animate []
-  (swap! state assoc :step 0)
-  (if (= (:animate @state) :play)
-    (swap! state assoc :animate :pause)
-    (swap! state assoc :animate :play)))
+  (swap! animation-state assoc :step 0)
+  (if (= (:animate @animation-state) :play)
+    (swap! animation-state assoc :animate :pause)
+    (swap! animation-state assoc :animate :play)))
 
 (defn control []
-  (let [playing (= (:animate @state) :play)
+  (let [playing (= (:animate @animation-state) :play)
         p-button (if playing "fa fa-2x fa-pause" "fa fa-2x fa-play")]
     (when playing
       (js/setTimeout tick 300))

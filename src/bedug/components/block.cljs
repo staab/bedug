@@ -1,5 +1,5 @@
 (ns bedug.components.block
-  (:require [bedug.state :refer [state]]))
+  (:require [bedug.state :refer [player-state]]))
 
 (defmulti block-class identity)
 (defmethod block-class :go-forward [_] "bedug-block bedug-block-blue")
@@ -26,5 +26,5 @@
    [:i {:class (icon-class command)}]])
 
 (defn adder-block [command]
-  [block command {:on-click #(swap! state update :queue conj command)}])
+  [block command {:on-click #(swap! player-state update :queue conj command)}])
 

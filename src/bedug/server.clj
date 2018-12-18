@@ -1,17 +1,39 @@
 (ns bedug.server
-  (:require [ring.adapter.jetty :refer [run-jetty]]
-            [ring.util.request :refer [body-string]]))
+  (:require [org.httpkit.server :as http]))
 
-(def state (atom "{:queue [] :step 0 :animate :initialize}"))
+(def state (atom {:players {}}))
 
-(defn handler [{:keys [request-method body] :as req}]
-  (when (= request-method :put)
-    (reset! state (body-string req)))
-  {:status 200
-   :headers {"Content-Type" "text/plain"
-             "Access-Control-Allow-Origin" "*"
-             "Access-Control-Allow-Methods" "OPTIONS, GET, PUT"}
-   :body @state})
+(def channels (atom {}))
+
+(defn msg [type payload]
+  (pr-str {:type type :payload payload}))
+
+(defn broadcast! [type payload]
+  (run! #(http/send! % (msg type payload)) (keys @channels)))
+
+(defmulti handle-message (fn [channel {:keys [type]}] type))
+
+(defmethod handle-message :update-player [channel {:keys [payload]}]
+  (let [{:keys [player-id player-state]} payload]
+    (swap! channels assoc channel {:player-id player-id})
+    (swap! state update :players assoc player-id player-state)
+    (broadcast! :update-player payload)))
+
+(defmethod handle-message :remove-player [channel _]
+  (let [{:keys [player-id]} (get @channels channel)]
+    (swap! channels dissoc channel)
+    (swap! state update :players dissoc player-id)
+    (broadcast! :remove-player {:player-id player-id})))
+
+(defn on-message [channel data]
+  (prn "Handling message" data)
+  (handle-message channel (read-string data)))
+
+(defn handler [req]
+  (http/with-channel req channel
+    (http/on-close channel (partial on-message channel {:type :remove-player}))
+    (http/on-receive channel (partial on-message channel))
+    (http/send! channel (msg :init @state))))
 
 (defn -main []
-  (run-jetty handler {:port 8080}))
+  (http/run-server handler {:port 8080}))

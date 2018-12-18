@@ -1,6 +1,5 @@
 (ns bedug.components.palette
-  (:require [bedug.state :as s]
-            [bedug.components.block :refer [adder-block]]))
+  (:require [bedug.components.block :refer [adder-block]]))
 
 (defn palette []
   [:div {:class "bedug-palette"}
