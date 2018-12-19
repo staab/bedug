@@ -27,13 +27,21 @@
 
 (defn on-message [channel data]
   (prn "Handling message" data)
-  (handle-message channel (read-string data)))
+  (handle-message channel (if (string? data) (read-string data) data)))
 
 (defn handler [req]
   (http/with-channel req channel
-    (http/on-close channel (partial on-message channel {:type :remove-player}))
+    (http/on-close channel (fn [_] (on-message channel {:type :remove-player})))
     (http/on-receive channel (partial on-message channel))
     (http/send! channel (msg :init @state))))
 
+(defn start-timer []
+  (future
+    (loop []
+      (broadcast! :tick nil)
+      (Thread/sleep 300)
+      (recur))))
+
 (defn -main []
-  (http/run-server handler {:port 8080}))
+  (http/run-server handler {:port 8080})
+  (start-timer))

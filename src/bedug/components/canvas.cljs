@@ -1,6 +1,6 @@
 (ns bedug.components.canvas
   (:require [clojure.string :as str]
-            [bedug.state :refer [full-state animation-state]]))
+            [bedug.state :refer [full-state]]))
 
 (defmulti command->attrs (fn [command _] command))
 
@@ -48,14 +48,13 @@
     (if shake (str base " shake") base)))
 
 (defn canvas []
-  [:div
+  [:div {:class "bedug-canvas"}
     (doall
-      (for [[player-id {:keys [queue]}] (:players @full-state)]
-        (let [{:keys [step]} @animation-state
-              commands (take step queue)
+      (for [[player-id {:keys [queue step path]}] (:players @full-state)
+            :when (not= path :canvas)]
+        (let [commands (take step queue)
               attrs (commands->attrs commands)
               transform (attrs->transform attrs)
               class (bug-class attrs (= (last commands) :shake))
               style {:transform transform}]
-          [:div {:class "bedug-canvas" :key player-id}
-           [:i {:class class :style style}]])))])
+           [:i {:class class :key player-id :style style}])))])

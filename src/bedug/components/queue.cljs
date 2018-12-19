@@ -1,6 +1,6 @@
 (ns bedug.components.queue
   (:require [bedug.utils :refer [vec-remove]]
-            [bedug.state :refer [player-state]]
+            [bedug.state :refer [update-player! player-state]]
             [bedug.components.block :refer [block]]))
 
 (defn queue []
@@ -11,5 +11,5 @@
          ^{:key (str command idx)}
          [block
           command
-          {:on-click #(swap! player-state update :queue vec-remove idx)}])
+          {:on-click #(update-player! update :queue vec-remove idx)}])
        (:queue @player-state)))])

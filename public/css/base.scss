@@ -12,6 +12,7 @@ html, body {
   display: flex;
   align-items: center;
   justify-content: center;
+  overflow: hidden;
 }
 
 .bedug-queue, .bedug-palette {
@@ -40,7 +41,7 @@ html, body {
 
 .bedug-block {
   box-shadow: 0px 4px 4px rgba(0, 0, 0, .25);
-  margin: 10px;
+  margin: 10px auto;
   width: 100px;
   height: 100px;
   cursor: pointer;
@@ -69,13 +70,13 @@ html, body {
 }
 
 .bedug-app .bedug-queue {
-  right: 120px;
-  width: 120px;
+  right: 135px;
+  width: 135px;
 }
 
 .bedug-app .bedug-palette {
   right: 0;
-  width: 120px;
+  width: 135px;
 }
 
 /* Variant layouts */
