@@ -33,7 +33,7 @@
   (when-not (get-in payload [:players @player-id])
     (reset! player-id (str (rand-int 99999)))
     (reset! full-state payload)
-    (update-player! assoc :path (keyword (subs path 1)))))
+    (update-player! assoc :path path)))
 
 (defmethod handle-message :update-player [{:keys [payload]}]
   (let [{id :player-id state :player-state} payload]

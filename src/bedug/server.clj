@@ -29,11 +29,26 @@
   (prn "Handling message" data)
   (handle-message channel (if (string? data) (read-string data) data)))
 
+(defn handle-websocket [req channel]
+  (http/on-close channel (fn [_] (on-message channel {:type :remove-player})))
+  (http/on-receive channel (partial on-message channel))
+  (http/send! channel (msg :init @state)))
+
+(defn handle-http [{:keys [uri]} channel]
+  (http/send! channel
+    (case uri
+      "/" (slurp "public/index.html")
+      "/css/main.css" {:headers {"Content-Type" "text/css"}
+                       :body (slurp "public/css/main.css")}
+      "/js/main.js" {:headers {"Content-Type" "application/javascript"}
+                     :body (slurp "public/js/main.js")}
+      {:status 404 :body (format "%s not found" uri)})))
+
 (defn handler [req]
   (http/with-channel req channel
-    (http/on-close channel (fn [_] (on-message channel {:type :remove-player})))
-    (http/on-receive channel (partial on-message channel))
-    (http/send! channel (msg :init @state))))
+    (if (http/websocket? channel)
+      (handle-websocket req channel)
+      (handle-http req channel))))
 
 (defn start-timer []
   (future

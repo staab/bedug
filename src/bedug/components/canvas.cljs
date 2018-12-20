@@ -1,6 +1,6 @@
 (ns bedug.components.canvas
   (:require [clojure.string :as str]
-            [bedug.state :refer [full-state]]))
+            [bedug.state :refer [full-state] :as s]))
 
 (defmulti command->attrs (fn [command _] command))
 
@@ -51,10 +51,11 @@
   [:div {:class "bedug-canvas"}
     (doall
       (for [[player-id {:keys [queue step path]}] (:players @full-state)
-            :when (not= path :canvas)]
+            :when (not= path "/canvas")]
         (let [commands (take step queue)
               attrs (commands->attrs commands)
               transform (attrs->transform attrs)
               class (bug-class attrs (= (last commands) :shake))
-              style {:transform transform}]
+              opacity (if (= player-id @s/player-id) 1 0.2)
+              style {:transform transform :opacity opacity}]
            [:i {:class class :key player-id :style style}])))])
