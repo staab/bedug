@@ -57,6 +57,7 @@
       (Thread/sleep 300)
       (recur))))
 
-(defn -main []
-  (http/run-server handler {:port 8080})
-  (start-timer))
+(defn -main [& [port]]
+  (let [port (Integer. (or port (env :port) 5000))]
+    (http/run-server handler {:port port})
+    (start-timer)))
