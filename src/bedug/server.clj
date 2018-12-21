@@ -39,6 +39,8 @@
   (http/send! channel
     (case uri
       "/" (slurp "public/index.html")
+      "/control" (slurp "public/index.html")
+      "/canvas" (slurp "public/index.html")
       "/css/main.css" {:headers {"Content-Type" "text/css"}
                        :body (slurp "public/css/main.css")}
       "/js/main.js" {:headers {"Content-Type" "application/javascript"}
