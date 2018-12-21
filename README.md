@@ -2,6 +2,8 @@ To play the game on your computer, click [here](bedug.herokuapp.com/).
 
 To play with multiple players sharing a screen, click [here](bedug.herokuapp.com/control) on your phone, and [here](bedug.herokuapp.com/canvas) on the shared screen. This will allow you to see everyone's bugs all on the same screen, and control it from your phone!
 
+This game is technically an MMO, so you'll see everyone who is playing all at once on the screen.
+
 # About
 
 Bedug is a game I wrote to lay the foundation for my three-year-old to begin programming. The idea was to introduce the concept of a procedure, a series of steps that are defined to make something happen. Loops, variables, conditionals, and all the other features that might be considered "beginner level" are deliberately excluded.
