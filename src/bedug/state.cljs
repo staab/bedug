@@ -60,6 +60,7 @@
 
 ;; Websocket instantiation
 
-(def ws (js/WebSocket. "ws://192.168.0.4:8080"))
+;; (def ws (js/WebSocket. "ws://192.168.0.4:8080"))
+(def ws (js/WebSocket. "wss://bedug.herokuapp.com"))
 
 (.addEventListener ws "message" on-message)
