@@ -1,0 +1,6 @@
+{
+  "name": "Bedug",
+  "description": "A programming game for kids",
+  "image": "heroku/clojure",
+  "addons": []
+}
