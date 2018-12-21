@@ -1,5 +1,6 @@
 (ns bedug.server
-  (:require [org.httpkit.server :as http]))
+  (:require [org.httpkit.server :as http]
+            [environ.core :refer [env]]))
 
 (def state (atom {:players {}}))
 
