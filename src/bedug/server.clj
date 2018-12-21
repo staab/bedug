@@ -1,6 +1,7 @@
 (ns bedug.server
   (:require [org.httpkit.server :as http]
-            [environ.core :refer [env]]))
+            [environ.core :refer [env]]
+            [clojure.java.io :as io]))
 
 (def state (atom {:players {}}))
 
@@ -35,16 +36,19 @@
   (http/on-receive channel (partial on-message channel))
   (http/send! channel (msg :init @state)))
 
+(defn file-res [path content-type]
+  {:headers {"Content-Type" content-type}
+   :body (io/file (str "public/" path))})
+
 (defn handle-http [{:keys [uri]} channel]
   (http/send! channel
     (case uri
-      "/" (slurp "public/index.html")
-      "/control" (slurp "public/index.html")
-      "/canvas" (slurp "public/index.html")
-      "/css/main.css" {:headers {"Content-Type" "text/css"}
-                       :body (slurp "public/css/main.css")}
-      "/js/main.js" {:headers {"Content-Type" "application/javascript"}
-                     :body (slurp "public/js/main.js")}
+      "/" (file-res "index.html" "text/html")
+      "/control" (file-res "index.html" "text/html")
+      "/canvas" (file-res "index.html" "text/html")
+      "/img/favicon.png" (file-res "img/favicon.png" "image/png")
+      "/css/main.css" (file-res "css/main.css" "text/css")
+      "/js/main.js" (file-res "js/main.js" "application/javascript")
       {:status 404 :body (format "%s not found" uri)})))
 
 (defn handler [req]

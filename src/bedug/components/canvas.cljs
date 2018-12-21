@@ -36,7 +36,7 @@
 (defmethod command->attrs :turn-green [_ attrs] (merge attrs {:c "text-green"}))
 
 (defn commands->attrs [commands]
-  (loop [idx 0 attrs {:r 0 :x 0 :y 0 :c ""}]
+  (loop [idx 0 attrs {:r 0 :x 0 :y 0 :c "text-teal"}]
     (let [c (nth commands idx nil)]
       (if c (recur (inc idx) (command->attrs c attrs)) attrs))))
 

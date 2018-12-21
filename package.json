@@ -9,7 +9,8 @@
     "watch": "run-p watch-js watch-css",
     "build-js": "shadow-cljs release app",
     "build-css": "pleeease compile public/css to public/css/main.css",
-    "build": "run-p build-js build-css",
+    "build-server": "lein deps && lein compile && lein uberjar",
+    "build": "run-p build-js build-css build-server",
     "repl": "rlwrap shadow-cljs cljs-repl app",
     "server": "shadow-cljs server"
   },
